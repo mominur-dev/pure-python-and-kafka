@@ -1,22 +1,35 @@
 from confluent_kafka import Producer
+import json
+import time
 
-conf = {
-    'bootstrap.servers': 'localhost:9092'
-}
+producer = Producer({'bootstrap.servers': 'localhost:9092'})
 
-producer = Producer(conf)
-
-topic = "test-topic"
-
-def delivery_report(err, msg):
-    if err:
-        print(f"Delivery failed: {err}")
-    else:
-        print(f"Message delivered to {msg.topic()} [{msg.partition()}]")
-
-for i in range(10):
-    message = f"Hello Kafka Message {i}"
-    producer.produce(topic, message.encode('utf-8'), callback=delivery_report)
+def send(topic, data):
+    producer.produce(topic, json.dumps(data).encode('utf-8'))
     producer.poll(0)
 
-producer.flush()
+# Simulated system loop
+while True:
+    
+    # Driver location
+    send("driver-location", {
+        "driver_id": 101,
+        "lat": 23.81,
+        "lng": 90.41
+    })
+
+    # Ride request
+    send("ride-request", {
+        "user_id": 55,
+        "pickup": "Mohakhali",
+        "drop": "Gulshan 1"
+    })
+
+    # Payment event
+    send("payments", {
+        "ride_id": 999,
+        "amount": 150
+    })
+
+    print("Events sent")
+    time.sleep(3)
