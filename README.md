@@ -1,10 +1,8 @@
-# 📘 Python + Kafka Project Setup (Docker KRaft Mode)
-
 This project demonstrates how to set up Apache Kafka using Docker (without Zookeeper) and connect it with Python producer and consumer applications.
 
 ---
 
-# 🚀 1. Project Overview
+# Project Overview
 
 We will build:
 
@@ -15,7 +13,7 @@ We will build:
 
 ---
 
-# 🧱 2. Kafka Setup (Docker Compose)
+# Kafka Setup (Docker Compose)
 
 We are using Kafka **KRaft mode (no Zookeeper required)**.
 
@@ -62,7 +60,7 @@ volumes:
 
 ---
 
-# ▶️ 3. Start Kafka
+# Start Kafka
 
 Run the following command:
 
@@ -84,7 +82,7 @@ Kafka Server started
 
 ---
 
-# 📦 4. Install Python Kafka Client
+# Install Python Kafka Client
 
 We use the official Python client:
 
@@ -92,78 +90,18 @@ We use the official Python client:
 pip install confluent-kafka
 ```
 
----
-
-# 📤 5. Kafka Producer (Send Data)
-
-Create file: `producer.py`
-
-```python
-from confluent_kafka import Producer
-
-conf = {
-    'bootstrap.servers': 'localhost:9092'
-}
-
-producer = Producer(conf)
-
-topic = "test-topic"
-
-def delivery_report(err, msg):
-    if err:
-        print(f"Delivery failed: {err}")
-    else:
-        print(f"Message delivered to {msg.topic()} [{msg.partition()}]")
-
-for i in range(5):
-    message = f"Hello Kafka Message {i}"
-    producer.produce(topic, message.encode('utf-8'), callback=delivery_report)
-    producer.poll(0)
-
-producer.flush()
-```
 
 ---
 
-# 📥 6. Kafka Consumer (Receive Data)
+# Run Python Applications
 
-Create file: `consumer.py`
-
-```python
-from confluent_kafka import Consumer
-
-conf = {
-    'bootstrap.servers': 'localhost:9092',
-    'group.id': 'my-group',
-    'auto.offset.reset': 'earliest'
-}
-
-consumer = Consumer(conf)
-consumer.subscribe(['test-topic'])
-
-print("Listening for messages...")
-
-while True:
-    msg = consumer.poll(1.0)
-
-    if msg is None:
-        continue
-
-    if msg.error():
-        print(msg.error())
-        continue
-
-    print("Received:", msg.value().decode('utf-8'))
-```
-
----
-
-# ▶️ 7. Run Python Applications
-
-### Step 1: Start Consumer
+### Step 1: Start Consumer in three diffrent tabs
 
 ```bash
-python consumer.py
+python consumer_payments.py
+python consumer_rides.py
+python consumer_tracking.py
+
 ```
 
 ### Step 2: Start Producer
@@ -171,29 +109,3 @@ python consumer.py
 ```bash
 python producer.py
 ```
-
----
-
-# 🔁 8. System Architecture
-
-```text
-Producer → Kafka Topic → Consumer
-```
-
-Flow:
-
-1. Producer sends event
-2. Kafka stores event
-3. Consumer reads event in real-time
-
----
-
-# 🧠 9. Key Concepts
-
-| Component  | Description             |
-| ---------- | ----------------------- |
-| Broker     | Kafka server            |
-| Topic      | Message channel         |
-| Producer   | Sends data              |
-| Consumer   | Reads data              |
-| KRaft Mode | Kafka without Zookeeper |
