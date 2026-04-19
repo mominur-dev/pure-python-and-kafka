@@ -1,0 +1,78 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pkl
+*.log
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# =========================
+# IDEs
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Environment variables
+# =========================
+.env
+.env.local
+.env.*.local
+
+# =========================
+# Kafka / Docker / Local data
+# =========================
+# Kafka log/data directories (if mounted locally)
+kafka_data/
+kafka_logs/
+kafka_kraft/
+
+# Docker volumes (optional local tracking)
+*.volume
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+
+# =========================
+# Testing / coverage
+# =========================
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =========================
+# Jupyter Notebook
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Build / dist
+# =========================
+build/
+dist/
+*.egg-info/
+
+# =========================
+# Kafka specific temporary files
+# =========================
+*.offset
+*.checkpoint
